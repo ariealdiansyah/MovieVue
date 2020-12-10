@@ -13,108 +13,25 @@
                   alt=""
                 />
               </div>
-              <div class="col-md-8">
-                <div class="d-flex">
-                  <div class="col-3">
-                    <span class="text-details"> Judul </span>
-                  </div>
-                  <div class="col-1">
-                    <span class="text-details">:</span>
-                  </div>
-                  <div class="col" style="margin-left: -1em">
-                    <span class="text-infos">
-                      {{ movie.title }}
-                    </span>
-                  </div>
+              <div class="col-md-8" style="color: white">
+                <div class="col-md-12">
+                  <h1>{{ movie.title }} </h1>
+                  <h3 class="font-italic">{{ movie.original_title }}</h3>
+                  <span> <font-awesome-icon icon="star" /> {{movie.vote_average}} </span>
                 </div>
-                <div class="d-flex">
-                  <div class="col-3">
-                    <span class="text-details"> Original Title </span>
-                  </div>
-                  <div class="col-1">
-                    <span class="text-details">:</span>
-                  </div>
-                  <div class="col" style="margin-left: -1em">
-                    <span class="text-infos">
-                      {{ movie.original_title }}
-                    </span>
-                  </div>
+                <div class="col-md-12 mt-4">
+                  <h3>Overview</h3>
+                  <p>{{ movie.overview }}</p>
                 </div>
-                <div class="d-flex">
-                  <div class="col-3">
-                    <span class="text-details"> Genre </span>
-                  </div>
-                  <div class="col-1">
-                    <span class="text-details">:</span>
-                  </div>
-                  <div class="col" style="margin-left: -1em">
-                    <div
-                      class="text-genre"
-                      v-for="genre in movie.genres"
-                      :key="genre.id"
-                      style="display: inline-block"
-                    >
-                      <span style="display: inline">{{ genre.name }}, </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="d-flex">
-                  <div class="col-3">
-                    <span class="text-details"> Rating </span>
-                  </div>
-                  <div class="col-1">
-                    <span class="text-details">:</span>
-                  </div>
-                  <div class="col" style="margin-left: -1em">
-                    <span class="text-infos">
-                      {{ movie.vote_average }}
-                    </span>
-                  </div>
-                </div>
-                <div class="d-flex">
-                  <div class="col-3">
-                    <span class="text-details"> Sinopsis </span>
-                  </div>
-                  <div class="col-1">
-                    <span class="text-details">:</span>
-                  </div>
-                  <div class="col" style="margin-left: -1em">
-                    <span class="text-infos">
-                      {{ movie.overview }}
-                    </span>
-                  </div>
-                </div>
-                <div class="d-flex">
-                  <div class="col-3">
-                    <span class="text-details"> Bahasa </span>
-                  </div>
-                  <div class="col-1">
-                    <span class="text-details">:</span>
-                  </div>
-                  <div class="col" style="margin-left: -1em">
-                    <div
-                      class="text-genre"
-                      v-for="lang in movie.spoken_languages"
-                      :key="lang.iso_639_1"
-                      style="display: inline-block"
-                    >
-                      <span style="display: inline"
-                        ><lang-flag :iso="lang.iso_639_1" />
-                        {{ lang.english_name }},
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="d-flex">
-                  <div class="col-3">
-                    <span class="text-details"> Tanggal Terbit </span>
-                  </div>
-                  <div class="col-1">
-                    <span class="text-details">:</span>
-                  </div>
-                  <div class="col" style="margin-left: -1em">
-                    <span class="text-infos">
-                      {{ movie.release_date }}
+                <div class="col-md-12 mt-4" v-if="movie.genres.length > 0">
+                  <h3>Genre</h3>
+                  <div
+                    v-for="genre in movie.genres"
+                    :key="genre.id"
+                    style="display: inline-block"
+                  >
+                    <span style="display: inline-block"
+                      >{{ genre.name || '-' }},
                     </span>
                   </div>
                 </div>

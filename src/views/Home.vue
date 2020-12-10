@@ -2,38 +2,17 @@
   <div class="home">
     <Navbar />
     <div>
-      <b-carousel
-        id="carousel-1"
-        fade
-        v-model="slide"
-        :interval="4000"
-        controls
-        indicators
-        background="#ababab"
-        img-width="1024"
-        img-height="500"
-        style="text-shadow: 1px 1px 2px #333"
-        @sliding-start="onSlideStart"
-        @sliding-end="onSlideEnd"
-      >
-        <!-- Text slides with image -->
-        <b-carousel-slide
-          v-for="movie in topRatedMovie.results"
-          :key="movie.id"
-          :caption="`${movie.title}`"
-          :text="`${movie.overview}`"
-          :img-src="`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`"
-          class="img-carousel"
-          @click="goDetail(movie.id)"
-        >
-          <router-link
-            :to="{ name: 'Movie', params: { id: movie.id } }"
-            class="btn-carousel"
-          >
-            VIEW MORE
-          </router-link>
-        </b-carousel-slide>
-      </b-carousel>
+      <Banner :topRated="topRatedMovie" type="Movie" />
+      <div class="container">
+        <div class="mt-4">
+          <h2>Popular Movie</h2>
+          <FilmList :film="popularMovie" type="Movie" />
+        </div>
+        <div class="mt-4">
+          <h2>Now Playing Movie</h2>
+          <FilmList :film="nowPlaying" type="Movie" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -41,57 +20,49 @@
 <script>
 // @ is an alias to /src
 import Navbar from "@/components/Navbar.vue";
-import axios from "axios";
+import FilmList from "@/components/FilmList.vue";
+import Banner from "@/components/Carousel.vue";
 import { mapState } from "vuex";
 
 export default {
   name: "Home",
   components: {
     Navbar,
+    FilmList,
+    Banner
   },
   computed: {
     ...mapState(["topRatedMovie"]),
     ...mapState(["token"]),
+    ...mapState(["popularMovie"]),
+    ...mapState(["nowPlaying"]),
   },
   created() {
     const config = {
       headers: { Authorization: `Bearer ${this.token}` },
     };
-    axios
-      .get("https://api.themoviedb.org/3/movie/top_rated", config)
-      .then((res) => {
-        this.$store.commit("setTopRated", res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        this.$toast.error(
-          "You're Offline, Please Check your internet connection",
-          {
-            type: "error",
-            position: "top-right",
-            duration: 3000,
-            dismissible: true,
-          }
-        );
-      });
+    this.$store.dispatch("getTopRated", {config : config, type : 'movie'});
+    this.$store.dispatch("getPopular", {config : config, type : 'movie'});
+    this.$store.dispatch("getNowPlaying", {config : config, type : 'movie'});
+    this.$store.dispatch("getUpcoming", {config : config, type : 'movie'});
   },
-  data() {
-    return {
-      slide: 0,
-      sliding: null,
-    };
-  },
-  methods: {
-    onSlideStart() {
-      this.sliding = true;
-    },
-    onSlideEnd() {
-      this.sliding = false;
-    },
-    goDetail(id) {
-      this.$router.push({ name: "user", params: { id: id } });
-    },
-  },
+  // data() {
+  //   return {
+  //     slide: 0,
+  //     sliding: null,
+  //   };
+  // },
+  // methods: {
+  //   onSlideStart() {
+  //     this.sliding = true;
+  //   },
+  //   onSlideEnd() {
+  //     this.sliding = false;
+  //   },
+  //   goDetail(id) {
+  //     this.$router.push({ name: "user", params: { id: id } });
+  //   },
+  // },
 };
 </script>
 
